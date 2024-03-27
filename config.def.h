@@ -146,10 +146,10 @@ static const char *librewolf[]          = { "librewolf", NULL };
 static const char *screenshotScreen[]   = { "captureScreen", NULL };
 static const char *screenshotArea[]     = { "captureArea", NULL };
 static const char *files[]              = { "pcmanfm", NULL };
-static const char *monBrightnessUp[]    = { "brightnessctl", "set", "+10", NULL };
-static const char *monBrightnessDown[]  = { "brightnessctl", "set", "-10", NULL };
-static const char *keyBrightnessUp[]    = { "sudo", "brightnessctl", "-d", "smc::kbd_backlight", "set", "+10", NULL };
-static const char *keyBrightnessDown[]  = { "sudo", "brightnessctl", "-d", "smc::kbd_backlight", "set", "-10", NULL };
+static const char *monBrightnessUp[]    = { "brightnessctl", "set", "+10%", NULL };
+static const char *monBrightnessDown[]  = { "brightnessctl", "set", "10%-", NULL };
+static const char *keyBrightnessUp[]    = { "brightnessctl", "-d", "smc::kbd_backlight", "set", "+10%", NULL };
+static const char *keyBrightnessDown[]  = { "brightnessctl", "-d", "smc::kbd_backlight", "set", "10%-", NULL };
 
 static const Key keys[] = {
     /* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
