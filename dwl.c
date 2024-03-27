@@ -1783,7 +1783,7 @@ handlecursoractivity(bool restore_focus)
 		cursor_hidden = false;
 
 		if (restore_focus)
-			motionnotify(0);
+			motionnotify(0, NULL, 0, 0, 0, 0);
 	}
 }
 
