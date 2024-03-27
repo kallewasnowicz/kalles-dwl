@@ -59,12 +59,15 @@ static const Layout layouts[] = {
 /* monitors */
 /* NOTE: ALWAYS add a fallback rule, even if you are completely sure it won't be used */
 static const MonitorRule monrules[] = {
-    /* name       mfact  nmaster scale layout       rotate/reflect                x    y */
-    /* example of a HiDPI laptop monitor:
-    { "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
-    */
-    /* defaults */
-    { NULL,       0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	/* name       mfact  nmaster scale layout       rotate/reflect                x    y */
+	/* example of a HiDPI laptop monitor:
+	{ "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	*/
+
+    /* Macbook*/
+    { "eDP-1",    0.55f,    1,      1.25,   &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	/* defaults */
+	{ NULL,       0.55f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 };
 
 /* keyboard */
