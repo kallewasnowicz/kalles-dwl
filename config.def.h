@@ -21,16 +21,18 @@ static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You ca
 static int log_level = WLR_ERROR;
 
 static const Rule rules[] = {
-	/* app_id     title       tags mask     isfloating   monitor */
+	/* app_id     title       tags mask     isfloating   monitor  isLeft */
 	/* examples:
-	{ "Gimp",     NULL,       0,            1,           -1 },
+	{ "Gimp",     NULL,       0,            1,           -1,      0 },
+	{ "slack",    NULL,       0,            1,           -1,      1 },
 	*/
-	{ "firefox",  NULL,       1 << 8,       0,           -1 },
+	{ "firefox",  NULL,       1 << 8,       0,           -1,      0 },
 };
 
 /* layout(s) */
 static const Layout layouts[] = {
 	/* symbol     arrange function */
+	{ "=O=",      varcol },  /* first entry is default */
 	{ "[]=",      tile },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
@@ -152,7 +154,24 @@ static const Key keys[] = {
 	TAGKEYS(          XKB_KEY_7, XKB_KEY_ampersand,                  6),
 	TAGKEYS(          XKB_KEY_8, XKB_KEY_asterisk,                   7),
 	TAGKEYS(          XKB_KEY_9, XKB_KEY_parenleft,                  8),
+
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,           {0} },
+
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Tab,        pushleft,       {0}},
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_ISO_Left_Tab,pushleft,      {0}},
+ 
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_I,          incncols,       {.i = +1 }},
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_D,          incncols,       {.i = -1 }},
+	{ MODKEY,                    XKB_KEY_h,          setcolfact,     {.f = -0.05 }},
+	{ MODKEY,                    XKB_KEY_l,          setcolfact,     {.f = +0.05 }},
+
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Tab,        pushleft,       {0}},
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_ISO_Left_Tab,pushleft,      {0}},
+
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_I,          incncols,       {.i = +1}},
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_D,          incncols,       {.i = -1 }},
+	{ MODKEY,                    XKB_KEY_h,          setcolfact,     {.f = -0.05 }},
+	{ MODKEY,                    XKB_KEY_l,          setcolfact,     {.f = +0.05 }},
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
 	{ WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,XKB_KEY_Terminate_Server, quit, {0} },

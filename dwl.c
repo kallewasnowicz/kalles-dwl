@@ -139,6 +139,8 @@ typedef struct {
 	uint32_t tags;
 	int isfloating, isurgent, isfullscreen;
 	uint32_t resize; /* configure serial of a pending resize */
+	int isLeft;
+	float cfact;
 } Client;
 
 typedef struct {
@@ -205,6 +207,18 @@ struct Monitor {
 	int gamma_lut_changed;
 	int nmaster;
 	char ltsymbol[16];
+	float colfact[3];     /* Relative sizes of the different column types */
+	int nmastercols;      /* The number of master columns to use */
+	int nrightcols;       /* The number of right "stack" columns to use */
+
+	/*
+		NOTE: This patch does not set these values, but leaves these here as a
+		placeholder to make it easier to merge with patches that do set gaps.
+	*/
+	int gappih;           /* horizontal gap between windows */
+	int gappiv;           /* vertical gap between windows */
+	int gappoh;           /* horizontal outer gaps */
+	int gappov;           /* vertical outer gaps */
 };
 
 typedef struct {
@@ -228,6 +242,7 @@ typedef struct {
 	uint32_t tags;
 	int isfloating;
 	int monitor;
+	int isLeft;
 } Rule;
 
 typedef struct {
@@ -284,6 +299,7 @@ static void focusstack(const Arg *arg);
 static Client *focustop(Monitor *m);
 static void fullscreennotify(struct wl_listener *listener, void *data);
 static void handlesig(int signo);
+static void incncols(const Arg *arg);
 static void incnmaster(const Arg *arg);
 static void inputdevice(struct wl_listener *listener, void *data);
 static int keybinding(uint32_t mods, xkb_keysym_t sym);
@@ -307,6 +323,7 @@ static void outputmgrtest(struct wl_listener *listener, void *data);
 static void pointerfocus(Client *c, struct wlr_surface *surface,
 		double sx, double sy, uint32_t time);
 static void printstatus(void);
+static void pushleft(const Arg *arg);
 static void quit(const Arg *arg);
 static void rendermon(struct wl_listener *listener, void *data);
 static void requestdecorationmode(struct wl_listener *listener, void *data);
@@ -314,6 +331,7 @@ static void requeststartdrag(struct wl_listener *listener, void *data);
 static void requestmonstate(struct wl_listener *listener, void *data);
 static void resize(Client *c, struct wlr_box geo, int interact);
 static void run(char *startup_cmd);
+static void setcolfact(const Arg *arg);
 static void setcursor(struct wl_listener *listener, void *data);
 static void setcursorshape(struct wl_listener *listener, void *data);
 static void setfloating(Client *c, int floating);
@@ -340,6 +358,7 @@ static void unmapnotify(struct wl_listener *listener, void *data);
 static void updatemons(struct wl_listener *listener, void *data);
 static void updatetitle(struct wl_listener *listener, void *data);
 static void urgent(struct wl_listener *listener, void *data);
+static void varcol(Monitor *m);
 static void view(const Arg *arg);
 static void virtualkeyboard(struct wl_listener *listener, void *data);
 static void virtualpointer(struct wl_listener *listener, void *data);
@@ -351,6 +370,7 @@ static void zoom(const Arg *arg);
 /* variables */
 static const char broken[] = "broken";
 static pid_t child_pid = -1;
+static const float colfact[3] = { 0.1f, 0.6f, 0.3f }; /* The relative factors for the size of each column */
 static int locked;
 static void *exclusive_focus;
 static struct wl_display *dpy;
@@ -457,12 +477,16 @@ applyrules(Client *c)
 		appid = broken;
 	if (!(title = client_get_title(c)))
 		title = broken;
+	c->isLeft = 0;
 
 	for (r = rules; r < END(rules); r++) {
 		if ((!r->title || strstr(title, r->title))
 				&& (!r->id || strstr(appid, r->id))) {
 			c->isfloating = r->isfloating;
 			newtags |= r->tags;
+			if (r->isLeft >= 0) {
+				c->isLeft = r->isLeft;
+			}
 			i = 0;
 			wl_list_for_each(m, &mons, link) {
 				if (r->monitor == i++)
@@ -882,6 +906,9 @@ createmon(struct wl_listener *listener, void *data)
 	wlr_output_state_init(&state);
 	/* Initialize monitor state using configured rules */
 	m->tagset[0] = m->tagset[1] = 1;
+	m->colfact[0] = colfact[0];
+	m->colfact[1] = colfact[1];
+	m->colfact[2] = colfact[2];
 	for (r = monrules; r < END(monrules); r++) {
 		if (!r->name || strstr(wlr_output->name, r->name)) {
 			m->m.x = r->x;
@@ -2928,6 +2955,8 @@ zoom(const Arg *arg)
 	focusclient(sel, 1);
 	arrange(selmon);
 }
+
+#include "varcol.c"
 
 #ifdef XWAYLAND
 void
