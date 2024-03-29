@@ -140,7 +140,7 @@ static const int cursor_timeout = 5;
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *termcmd[]            = { "alacritty", NULL };
+static const char *termcmd[]            = { "foot", NULL };
 static const char *menucmd[]            = { "tofi-drun", "--drun-launch=true", NULL };
 static const char *librewolf[]          = { "librewolf", NULL };
 static const char *screenshotScreen[]   = { "captureScreen", NULL };
