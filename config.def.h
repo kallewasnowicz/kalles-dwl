@@ -35,6 +35,7 @@ static const char *const autostart[] = {
     "waybar", NULL,
     "swaync", NULL,
     "gentoo-pipewire-launcher", NULL,
+    "foot", "-s", NULL,
     NULL /* terminate */
 };
 
