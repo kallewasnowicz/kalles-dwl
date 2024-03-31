@@ -5,3 +5,4 @@ dwl
 .ccls-cache
 config.h
 .vscode/settings.json
+*.patch

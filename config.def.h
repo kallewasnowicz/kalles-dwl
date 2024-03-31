@@ -7,7 +7,6 @@
 static const int sloppyfocus                = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility  = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const int smartgaps                  = 0;  /* 1 means no outer gap when there is only one window */
-static const int monoclegaps                = 0;  /* 1 means outer gaps in monocle layout */
 static const unsigned int borderpx          = 1;  /* border pixel of windows */
 static const float rootcolor[]              = COLOR(0x222222ff);
 static const unsigned int gappih            = 10; /* horiz inner gap between windows */
@@ -35,6 +34,7 @@ static const char *const autostart[] = {
     "waybar", NULL,
     "swaync", NULL,
     "gentoo-pipewire-launcher", NULL,
+    "foot", "-s", NULL,
     NULL /* terminate */
 };
 
@@ -140,7 +140,7 @@ static const int cursor_timeout = 5;
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *termcmd[]            = { "alacritty", NULL };
+static const char *termcmd[]            = { "foot", NULL };
 static const char *menucmd[]            = { "tofi-drun", "--drun-launch=true", NULL };
 static const char *librewolf[]          = { "librewolf", NULL };
 static const char *screenshotScreen[]   = { "captureScreen", NULL };
