@@ -35,6 +35,7 @@ static const char *const autostart[] = {
     "swaync", NULL,
     "gentoo-pipewire-launcher", NULL,
     "foot", "-s", NULL,
+    "wlr-randr", "--output", "eDP-1", "--custom-mode", "'1920x1200@60'", NULL,
     NULL /* terminate */
 };
 
