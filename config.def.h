@@ -30,7 +30,6 @@ static const char *const autostart[] = {
     "swaync", NULL,
     "gentoo-pipewire-launcher", NULL,
     "foot", "-s", NULL,
-    "macbook_res_med", NULL,
     NULL /* terminate */
 };
 
