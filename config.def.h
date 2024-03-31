@@ -30,6 +30,7 @@ static const char *const autostart[] = {
     "swaync", NULL,
     "gentoo-pipewire-launcher", NULL,
     "foot", "-s", NULL,
+    "macbook_res_med", NULL, /* monfig still buggy */
     NULL /* terminate */
 };
 
@@ -58,8 +59,8 @@ static const MonitorRule monrules[] = {
 	/* example of a HiDPI laptop monitor at 120Hz:
 	{ "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 120.000f, 1, 1},
 	*/
-    /* Macbook */
-    { "eDP-1",    0.55f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 1920, 1200, 60.0f, 0 ,1},
+        /* Macbook */
+        { "eDP-1",    0.55f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 1920, 1200, 60.000f, 0, 0},
 	/* defaults */
 	{ NULL,       0.55f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 0.0f, 0 ,1},
 	// mode let's the user decide on how dwl should implement the modes:
