@@ -4,18 +4,13 @@
                         ((hex >> 8) & 0xFF) / 255.0f, \
                         (hex & 0xFF) / 255.0f }
 /* appearance */
-static const int sloppyfocus                = 1;  /* focus follows mouse */
-static const int bypass_surface_visibility  = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
-static const int smartgaps                  = 0;  /* 1 means no outer gap when there is only one window */
-static const unsigned int borderpx          = 1;  /* border pixel of windows */
-static const float rootcolor[]              = COLOR(0x222222ff);
-static const unsigned int gappih            = 10; /* horiz inner gap between windows */
-static const unsigned int gappiv            = 10; /* vert inner gap between windows */
-static const unsigned int gappoh            = 10; /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov            = 10; /* vert outer gap between windows and screen edge */
-static const float bordercolor[]            = COLOR(0x444444ff);
-static const float focuscolor[]             = COLOR(0x005577ff);
-static const float urgentcolor[]            = COLOR(0xff0000ff);
+static const int sloppyfocus               = 1;  /* focus follows mouse */
+static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
+static const unsigned int borderpx         = 1;  /* border pixel of windows */
+static const float rootcolor[]             = COLOR(0x222222ff);
+static const float bordercolor[]           = COLOR(0x444444ff);
+static const float focuscolor[]            = COLOR(0x005577ff);
+static const float urgentcolor[]           = COLOR(0xff0000ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]          = {0.1f, 0.1f, 0.1f, 1.0f}; /* You can also use glsl colors */
 static const int center_relative_to_monitor = 0;  /* 0 means center floating relative to the window area  */
@@ -52,7 +47,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const Layout layouts[] = {
     /* symbol           arrange function */
-    { "[]=",            tile },
+	{ "=O=",            varcol },  /* first entry is default */
     { "|M|",            centeredmaster },
     { "><>",            NULL },    /* no layout function means floating behavior */
 };
@@ -60,15 +55,17 @@ static const Layout layouts[] = {
 /* monitors */
 /* NOTE: ALWAYS add a fallback rule, even if you are completely sure it won't be used */
 static const MonitorRule monrules[] = {
-	/* name       mfact  nmaster scale layout       rotate/reflect                x    y */
-	/* example of a HiDPI laptop monitor:
-	{ "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+    /* name       mfact nmaster scale layout       rotate/reflect              x  y  resx resy rate mode adaptive*/
+	/* example of a HiDPI laptop monitor at 120Hz:
+	{ "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 120.000f, 1, 1},
 	*/
-
-    /* Macbook
-    { "eDP-1",    0.55f,    1,      1.25,   &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },*/
+    /* Macbook */
+    { "eDP-1",    0.55f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 1920, 1200, 60.0f, 0 ,1},
 	/* defaults */
-	{ NULL,       0.55f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	{ NULL,       0.55f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 0.0f, 0 ,1},
+	// mode let's the user decide on how dwl should implement the modes:
+	// -1 Sets a custom mode following the users choice
+	// All other number's set the mode at the index n, 0 is the standard mode; see wlr-randr
 };
 
 /* keyboard */
@@ -136,7 +133,6 @@ static const int cursor_timeout = 5;
     { MODKEY|WLR_MODIFIER_CTRL,                     KEY,            toggleview,     {.ui = 1 << TAG} }, \
     { MODKEY|WLR_MODIFIER_SHIFT,                    SKEY,           tag,            {.ui = 1 << TAG} }, \
     { MODKEY|WLR_MODIFIER_CTRL|WLR_MODIFIER_SHIFT,  SKEY,           toggletag,      {.ui = 1 << TAG} }
-
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
@@ -169,8 +165,6 @@ static const Key keys[] = {
     { MODKEY,                       XKB_KEY_k,              focusstack,         {.i = -1} },
     { MODKEY,                       XKB_KEY_i,              incnmaster,         {.i = +1} },
     { MODKEY,                       XKB_KEY_d,              incnmaster,         {.i = -1} },
-    { MODKEY,                       XKB_KEY_h,              setmfact,           {.f = -0.05f} },
-    { MODKEY,                       XKB_KEY_l,              setmfact,           {.f = +0.05f} },
     { MODKEY,                       XKB_KEY_s,              zoom,               {0} },
     { MODKEY,                       XKB_KEY_Tab,            view,               {0} },
     { MODKEY,                       XKB_KEY_c,              killclient,         {0} },
@@ -186,7 +180,23 @@ static const Key keys[] = {
     { MODKEY,                       XKB_KEY_period,         focusmon,           {.i = WLR_DIRECTION_RIGHT} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_less,           tagmon,             {.i = WLR_DIRECTION_LEFT} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_greater,        tagmon,             {.i = WLR_DIRECTION_RIGHT} },
-    { MODKEY|WLR_MODIFIER_LOGO,     XKB_KEY_0,              togglegaps,         {0} },
+    /* varcol */
+    { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Tab,            pushleft,           {0}},
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_ISO_Left_Tab,   pushleft,            {0}},
+ 
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_I,              incncols,           {.i = +1 }},
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_D,              incncols,           {.i = -1 }},
+	{ MODKEY,                       XKB_KEY_h,              setcolfact,         {.f = -0.05 }},
+	{ MODKEY,                       XKB_KEY_l,              setcolfact,         {.f = +0.05 }},
+
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Tab,            pushleft,           {0}},
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_ISO_Left_Tab,   pushleft,           {0}},
+
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_I,              incncols,           {.i = +1}},
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_D,              incncols,           {.i = -1 }},
+	{ MODKEY,                       XKB_KEY_h,              setcolfact,         {.f = -0.05 }},
+	{ MODKEY,                       XKB_KEY_l,              setcolfact,         {.f = +0.05 }},
+    /* macbook */
     { MODKEY,                       XKB_KEY_XF86MonBrightnessUp,    spawn,      {.v = monBrightnessUp} },
     { MODKEY,                       XKB_KEY_XF86MonBrightnessDown,  spawn,      {.v = monBrightnessDown} },
     { MODKEY,                       XKB_KEY_XF86KbdBrightnessUp,    spawn,      {.v = keyBrightnessUp} },
@@ -206,7 +216,7 @@ static const Key keys[] = {
     TAGKEYS(          XKB_KEY_9, XKB_KEY_parenright,                    8),
 
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,              {0} },
-    
+
     /* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
     { WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,XKB_KEY_Terminate_Server, quit,{0} },
     /* Ctrl-Alt-Fx is used to switch to another VT, if you don't know what a VT is
