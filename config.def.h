@@ -4,18 +4,13 @@
                         ((hex >> 8) & 0xFF) / 255.0f, \
                         (hex & 0xFF) / 255.0f }
 /* appearance */
-static const int sloppyfocus                = 1;  /* focus follows mouse */
-static const int bypass_surface_visibility  = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
-static const int smartgaps                  = 0;  /* 1 means no outer gap when there is only one window */
-static const unsigned int borderpx          = 1;  /* border pixel of windows */
-static const float rootcolor[]              = COLOR(0x222222ff);
-static const unsigned int gappih            = 10; /* horiz inner gap between windows */
-static const unsigned int gappiv            = 10; /* vert inner gap between windows */
-static const unsigned int gappoh            = 10; /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov            = 10; /* vert outer gap between windows and screen edge */
-static const float bordercolor[]            = COLOR(0x444444ff);
-static const float focuscolor[]             = COLOR(0x005577ff);
-static const float urgentcolor[]            = COLOR(0xff0000ff);
+static const int sloppyfocus               = 1;  /* focus follows mouse */
+static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
+static const unsigned int borderpx         = 1;  /* border pixel of windows */
+static const float rootcolor[]             = COLOR(0x222222ff);
+static const float bordercolor[]           = COLOR(0x444444ff);
+static const float focuscolor[]            = COLOR(0x005577ff);
+static const float urgentcolor[]           = COLOR(0xff0000ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]          = {0.1f, 0.1f, 0.1f, 1.0f}; /* You can also use glsl colors */
 static const int center_relative_to_monitor = 0;  /* 0 means center floating relative to the window area  */
@@ -136,7 +131,6 @@ static const int cursor_timeout = 5;
     { MODKEY|WLR_MODIFIER_CTRL,                     KEY,            toggleview,     {.ui = 1 << TAG} }, \
     { MODKEY|WLR_MODIFIER_SHIFT,                    SKEY,           tag,            {.ui = 1 << TAG} }, \
     { MODKEY|WLR_MODIFIER_CTRL|WLR_MODIFIER_SHIFT,  SKEY,           toggletag,      {.ui = 1 << TAG} }
-
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
@@ -186,7 +180,6 @@ static const Key keys[] = {
     { MODKEY,                       XKB_KEY_period,         focusmon,           {.i = WLR_DIRECTION_RIGHT} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_less,           tagmon,             {.i = WLR_DIRECTION_LEFT} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_greater,        tagmon,             {.i = WLR_DIRECTION_RIGHT} },
-    { MODKEY|WLR_MODIFIER_LOGO,     XKB_KEY_0,              togglegaps,         {0} },
     /* varcol */
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Tab,            pushleft,           {0}},
 	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_ISO_Left_Tab,   pushleft,            {0}},
