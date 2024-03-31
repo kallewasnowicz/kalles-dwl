@@ -52,27 +52,16 @@ static const Layout layouts[] = {
 };
 
 /* monitors */
-/* NOTE: ALWAYS add a fallback rule, even if you are completely sure it won't be used */
 static const MonitorRule monrules[] = {
     /* name       mfact nmaster scale layout       rotate/reflect              x  y  resx resy rate mode adaptive*/
-	/* example of a HiDPI laptop monitor at 120Hz:
-	{ "eDP-1",    0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 120.000f, 1, 1},
-	*/
     /* Macbook */
-    { "eDP-1",    0.55f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 1920, 1200, 60.0f, 0 ,1},
+    { "eDP-1",    0.5f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 1920, 1200, 60.000f, -1 ,0},
 	/* defaults */
-	{ NULL,       0.55f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 0.0f, 0 ,1},
-	// mode let's the user decide on how dwl should implement the modes:
-	// -1 Sets a custom mode following the users choice
-	// All other number's set the mode at the index n, 0 is the standard mode; see wlr-randr
+	{ NULL,       0.5f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 0.0f, 0 ,1},
 };
 
 /* keyboard */
 static const struct xkb_rule_names xkb_rules = {
-    /* can specify fields: rules, model, layout, variant, options */
-    /* example:
-    .options = "ctrl:nocaps",
-    */
     .layout     = "de",
     .options    = NULL,
 };
@@ -132,6 +121,7 @@ static const int cursor_timeout = 5;
     { MODKEY|WLR_MODIFIER_CTRL,                     KEY,            toggleview,     {.ui = 1 << TAG} }, \
     { MODKEY|WLR_MODIFIER_SHIFT,                    SKEY,           tag,            {.ui = 1 << TAG} }, \
     { MODKEY|WLR_MODIFIER_CTRL|WLR_MODIFIER_SHIFT,  SKEY,           toggletag,      {.ui = 1 << TAG} }
+
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
