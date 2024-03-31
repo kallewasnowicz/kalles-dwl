@@ -239,6 +239,13 @@ typedef struct {
 	struct wl_listener destroy;
 } SessionLock;
 
+typedef struct {
+	const char *name;
+	uint32_t send_events_mode;
+	enum libinput_config_accel_profile accel_profile;
+	double accel_speed;
+} InputRule;
+
 /* function declarations */
 static void applybounds(Client *c, struct wlr_box *bbox);
 static void applyrules(Client *c);
@@ -991,9 +998,16 @@ createnotify(struct wl_listener *listener, void *data)
 void
 createpointer(struct wlr_pointer *pointer)
 {
+	const InputRule *irule;
 	struct libinput_device *device;
 	if (wlr_input_device_is_libinput(&pointer->base)
 			&& (device = wlr_libinput_get_device_handle(&pointer->base))) {
+
+		const char *device_name = libinput_device_get_name(device);
+		for (irule = inputrules; irule < END(inputrules); irule++) {
+			if (!irule->name || strstr(device_name, irule->name))
+				break;
+		}
 
 		if (libinput_device_config_tap_get_finger_count(device)) {
 			libinput_device_config_tap_set_enabled(device, tap_to_click);
@@ -1021,11 +1035,11 @@ createpointer(struct wlr_pointer *pointer)
 			libinput_device_config_click_set_method (device, click_method);
 
 		if (libinput_device_config_send_events_get_modes(device))
-			libinput_device_config_send_events_set_mode(device, send_events_mode);
+			libinput_device_config_send_events_set_mode(device, irule->send_events_mode);
 
 		if (libinput_device_config_accel_is_available(device)) {
-			libinput_device_config_accel_set_profile(device, accel_profile);
-			libinput_device_config_accel_set_speed(device, accel_speed);
+			libinput_device_config_accel_set_profile(device, irule->accel_profile);
+			libinput_device_config_accel_set_speed(device, irule->accel_speed);
 		}
 	}
 
