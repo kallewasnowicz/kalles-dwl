@@ -246,6 +246,15 @@ typedef struct {
 	double accel_speed;
 } InputRule;
 
+typedef struct {
+	const char *name;
+	const char *rules;
+	const char *model;
+	const char *layout;
+	const char *variant;
+	const char *options;
+} KeyboardRule;
+
 /* function declarations */
 static void applybounds(Client *c, struct wlr_box *bbox);
 static void applyrules(Client *c);
@@ -264,6 +273,7 @@ static void commitlayersurfacenotify(struct wl_listener *listener, void *data);
 static void commitnotify(struct wl_listener *listener, void *data);
 static void createdecoration(struct wl_listener *listener, void *data);
 static void createidleinhibitor(struct wl_listener *listener, void *data);
+static size_t createkbgroup(struct xkb_keymap *keymap);
 static void createkeyboard(struct wlr_keyboard *keyboard);
 static void createlayersurface(struct wl_listener *listener, void *data);
 static void createlocksurface(struct wl_listener *listener, void *data);
@@ -400,7 +410,8 @@ static struct wlr_session_lock_v1 *cur_lock;
 static struct wl_listener lock_listener = {.notify = locksession};
 
 static struct wlr_seat *seat;
-static KeyboardGroup kb_group = {0};
+static KeyboardGroup *kb_groups;
+static size_t kb_groups_length = 0;
 static KeyboardGroup vkb_group = {0};
 static struct wlr_surface *held_grab;
 static unsigned int cursor_mode;
@@ -662,6 +673,8 @@ checkidleinhibitor(struct wlr_surface *exclude)
 void
 cleanup(void)
 {
+	size_t i;
+
 #ifdef XWAYLAND
 	wlr_xwayland_destroy(xwayland);
 	xwayland = NULL;
@@ -675,13 +688,16 @@ cleanup(void)
 	wlr_output_layout_destroy(output_layout);
 
 	/* Remove event source that use the dpy event loop before destroying dpy */
-	wl_event_source_remove(kb_group.key_repeat_source);
+	for (i = 0; i < kb_groups_length; i++)
+		wl_event_source_remove(kb_groups[i].key_repeat_source);
 	wl_event_source_remove(vkb_group.key_repeat_source);
 
 	wl_display_destroy(dpy);
 	/* Destroy after the wayland display (when the monitors are already destroyed)
 	   to avoid destroying them with an invalid scene output. */
 	wlr_scene_node_destroy(&scene->tree.node);
+
+	free(kb_groups);
 }
 
 void
@@ -793,15 +809,69 @@ createidleinhibitor(struct wl_listener *listener, void *data)
 	checkidleinhibitor(NULL);
 }
 
+size_t
+createkbgroup(struct xkb_keymap *keymap)
+{
+	size_t i = kb_groups_length++;
+
+	kb_groups[i].wlr_group = wlr_keyboard_group_create();
+	kb_groups[i].wlr_group->data = &kb_groups[i];
+	wlr_keyboard_set_keymap(&kb_groups[i].wlr_group->keyboard, keymap);
+	wlr_keyboard_set_repeat_info(&kb_groups[i].wlr_group->keyboard, repeat_rate, repeat_delay);
+
+	/* Set up listeners for keyboard events */
+	LISTEN(&kb_groups[i].wlr_group->keyboard.events.key, &kb_groups[i].key, keypress);
+	LISTEN(&kb_groups[i].wlr_group->keyboard.events.modifiers, &kb_groups[i].modifiers, keypressmod);
+	kb_groups[i].key_repeat_source = wl_event_loop_add_timer(
+			wl_display_get_event_loop(dpy), keyrepeat, &kb_groups[i]);
+
+	return i;
+}
+
 void
 createkeyboard(struct wlr_keyboard *keyboard)
 {
+	const KeyboardRule *krule = NULL;
+	struct libinput_device *device = NULL;
+	struct xkb_keymap *keymap = NULL;
+	struct xkb_context *context = NULL;
+	struct xkb_rule_names xkb_rules;
+	size_t kb_groups_i = 0;
+
+	if (wlr_input_device_is_libinput(&keyboard->base)
+			&& (device = wlr_libinput_get_device_handle(&keyboard->base))) {
+		const char *device_name = libinput_device_get_name(device);
+		for (krule = kbrules; krule < END(kbrules); krule++) {
+			if (!krule->name || strstr(device_name, krule->name))
+				break;
+		}
+
+		if (krule->name) {
+			xkb_rules.rules = krule->rules;
+			xkb_rules.model = krule->model;
+			xkb_rules.layout = krule->layout;
+			xkb_rules.variant = krule->variant;
+			xkb_rules.options = krule->options;
+
+			context = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+			if ((keymap = xkb_keymap_new_from_names(context, &xkb_rules,
+						XKB_KEYMAP_COMPILE_NO_FLAGS))) {
+				kb_groups_i = createkbgroup(keymap);
+			} else {
+				fprintf(stderr, "failed to compile keymap for %s\n", krule->name);
+			}
+		}
+	}
+
 	/* Set the keymap to match the group keymap */
-	wlr_keyboard_set_keymap(keyboard, kb_group.wlr_group->keyboard.keymap);
+	wlr_keyboard_set_keymap(keyboard, kb_groups[kb_groups_i].wlr_group->keyboard.keymap);
 	wlr_keyboard_set_repeat_info(keyboard, repeat_rate, repeat_delay);
 
 	/* Add the new keyboard to the group */
-	wlr_keyboard_group_add_keyboard(kb_group.wlr_group, keyboard);
+	wlr_keyboard_group_add_keyboard(kb_groups[kb_groups_i].wlr_group, keyboard);
+
+	xkb_keymap_unref(keymap);
+	xkb_context_unref(context);
 }
 
 void
@@ -1000,6 +1070,7 @@ createpointer(struct wlr_pointer *pointer)
 {
 	const InputRule *irule;
 	struct libinput_device *device;
+
 	if (wlr_input_device_is_libinput(&pointer->base)
 			&& (device = wlr_libinput_get_device_handle(&pointer->base))) {
 
@@ -1436,7 +1507,7 @@ inputdevice(struct wl_listener *listener, void *data)
 	 * there are no pointer devices, so we always include that capability. */
 	/* TODO do we actually require a cursor? */
 	caps = WL_SEAT_CAPABILITY_POINTER;
-	if (!wl_list_empty(&kb_group.wlr_group->devices))
+	if (!wl_list_empty(&kb_groups[0].wlr_group->devices))
 		caps |= WL_SEAT_CAPABILITY_KEYBOARD;
 	wlr_seat_set_capabilities(seat, caps);
 }
@@ -2285,6 +2356,8 @@ setup(void)
 {
 	struct xkb_context *context;
 	struct xkb_keymap *keymap;
+	const KeyboardRule *krule;
+	struct xkb_rule_names xkb_rules;
 
 	int i, sig[] = {SIGCHLD, SIGINT, SIGTERM, SIGPIPE};
 	struct sigaction sa = {.sa_flags = SA_RESTART, .sa_handler = handlesig};
@@ -2472,8 +2545,8 @@ setup(void)
 	 * keyboards, keep their modifier and LED states in sync, and handle
 	 * keypresses
 	 */
-	kb_group.wlr_group = wlr_keyboard_group_create();
-	kb_group.wlr_group->data = &kb_group;
+	kb_groups = ecalloc(LENGTH(kbrules), sizeof(KeyboardGroup));
+	kb_groups_length = 0;
 
 	/*
 	 * Virtual keyboards need to be in a different group
@@ -2482,28 +2555,34 @@ setup(void)
 	vkb_group.wlr_group = wlr_keyboard_group_create();
 	vkb_group.wlr_group->data = &vkb_group;
 
+	/* Set the pointers from the default kbrules */
+	for (krule = kbrules; krule < END(kbrules); krule++) {
+		if (!krule->name)
+			break;
+	}
+	xkb_rules.rules = krule->rules;
+	xkb_rules.model = krule->model;
+	xkb_rules.layout = krule->layout;
+	xkb_rules.variant = krule->variant;
+	xkb_rules.options = krule->options;
+
 	/* Prepare an XKB keymap and assign it to the keyboard group. */
 	context = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
 	if (!(keymap = xkb_keymap_new_from_names(context, &xkb_rules,
 				XKB_KEYMAP_COMPILE_NO_FLAGS)))
 		die("failed to compile keymap");
 
-	wlr_keyboard_set_keymap(&kb_group.wlr_group->keyboard, keymap);
+	createkbgroup(keymap);
 	wlr_keyboard_set_keymap(&vkb_group.wlr_group->keyboard, keymap);
 	xkb_keymap_unref(keymap);
 	xkb_context_unref(context);
 
-	wlr_keyboard_set_repeat_info(&kb_group.wlr_group->keyboard, repeat_rate, repeat_delay);
 	wlr_keyboard_set_repeat_info(&vkb_group.wlr_group->keyboard, repeat_rate, repeat_delay);
 
 	/* Set up listeners for keyboard events */
-	LISTEN(&kb_group.wlr_group->keyboard.events.key, &kb_group.key, keypress);
-	LISTEN(&kb_group.wlr_group->keyboard.events.modifiers, &kb_group.modifiers, keypressmod);
 	LISTEN(&vkb_group.wlr_group->keyboard.events.key, &vkb_group.key, keypress);
 	LISTEN(&vkb_group.wlr_group->keyboard.events.modifiers, &vkb_group.modifiers, keypressmod);
 
-	kb_group.key_repeat_source = wl_event_loop_add_timer(
-			wl_display_get_event_loop(dpy), keyrepeat, &kb_group);
 	vkb_group.key_repeat_source = wl_event_loop_add_timer(
 			wl_display_get_event_loop(dpy), keyrepeat, &vkb_group);
 
@@ -2512,7 +2591,7 @@ setup(void)
 	 * same wlr_keyboard_group, which provides a single wlr_keyboard interface for
 	 * all of them. Set this combined wlr_keyboard as the seat keyboard.
 	 */
-	wlr_seat_set_keyboard(seat, &kb_group.wlr_group->keyboard);
+	wlr_seat_set_keyboard(seat, &kb_groups[0].wlr_group->keyboard);
 
 	output_mgr = wlr_output_manager_v1_create(dpy);
 	LISTEN_STATIC(&output_mgr->events.apply, outputmgrapply);

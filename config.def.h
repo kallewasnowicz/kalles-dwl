@@ -48,12 +48,13 @@ static const MonitorRule monrules[] = {
 };
 
 /* keyboard */
-static const struct xkb_rule_names xkb_rules = {
-	/* can specify fields: rules, model, layout, variant, options */
+/* NOTE: Always include a fallback rule at the end (name as NULL) */
+static const KeyboardRule kbrules[] = {
+	/* name       rules model layout   variant options */
 	/* example:
-	.options = "ctrl:nocaps",
+	{ "keyboard", NULL, NULL, "us,de", NULL,   "ctrl:nocaps" },
 	*/
-	.options = NULL,
+	{ NULL,       NULL, NULL, NULL,    NULL,   NULL },
 };
 
 static const int repeat_rate = 25;
