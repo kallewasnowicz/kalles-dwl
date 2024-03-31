@@ -51,6 +51,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const Layout layouts[] = {
     /* symbol           arrange function */
+	{ "=O=",            varcol },  /* first entry is default */
     { "[]=",            tile },
     { "|M|",            centeredmaster },
     { "><>",            NULL },    /* no layout function means floating behavior */
@@ -186,6 +187,23 @@ static const Key keys[] = {
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_less,           tagmon,             {.i = WLR_DIRECTION_LEFT} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_greater,        tagmon,             {.i = WLR_DIRECTION_RIGHT} },
     { MODKEY|WLR_MODIFIER_LOGO,     XKB_KEY_0,              togglegaps,         {0} },
+    /* varcol */
+    { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Tab,            pushleft,           {0}},
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_ISO_Left_Tab,   pushleft,            {0}},
+ 
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_I,              incncols,           {.i = +1 }},
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_D,              incncols,           {.i = -1 }},
+	{ MODKEY,                       XKB_KEY_h,              setcolfact,         {.f = -0.05 }},
+	{ MODKEY,                       XKB_KEY_l,              setcolfact,         {.f = +0.05 }},
+
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Tab,            pushleft,           {0}},
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_ISO_Left_Tab,   pushleft,           {0}},
+
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_I,              incncols,           {.i = +1}},
+	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_D,              incncols,           {.i = -1 }},
+	{ MODKEY,                       XKB_KEY_h,              setcolfact,         {.f = -0.05 }},
+	{ MODKEY,                       XKB_KEY_l,              setcolfact,         {.f = +0.05 }},
+    /* macbook */
     { MODKEY,                       XKB_KEY_XF86MonBrightnessUp,    spawn,      {.v = monBrightnessUp} },
     { MODKEY,                       XKB_KEY_XF86MonBrightnessDown,  spawn,      {.v = monBrightnessDown} },
     { MODKEY,                       XKB_KEY_XF86KbdBrightnessUp,    spawn,      {.v = keyBrightnessUp} },
@@ -205,7 +223,7 @@ static const Key keys[] = {
     TAGKEYS(          XKB_KEY_9, XKB_KEY_parenright,                    8),
 
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,              {0} },
-    
+
     /* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
     { WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,XKB_KEY_Terminate_Server, quit,{0} },
     /* Ctrl-Alt-Fx is used to switch to another VT, if you don't know what a VT is
