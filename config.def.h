@@ -46,7 +46,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const Layout layouts[] = {
     /* symbol           arrange function */
-	{ "=O=",            varcol },  /* first entry is default */
+	{ "[]=",            tile },
     { "|M|",            centeredmaster },
     { "><>",            NULL },    /* no layout function means floating behavior */
 };
@@ -151,10 +151,12 @@ static const Key keys[] = {
     { MODKEY,                       XKB_KEY_Sys_Req,        spawn,              {.v = screenshotScreen} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Sys_Req,        spawn,              {.v = screenshotArea} },
     { MODKEY,                       XKB_KEY_e,              spawn,              {.v = files} },
-    { MODKEY,                       XKB_KEY_j,              focusstack,         {.i = +1} },
-    { MODKEY,                       XKB_KEY_k,              focusstack,         {.i = -1} },
-    { MODKEY,                       XKB_KEY_i,              incnmaster,         {.i = +1} },
-    { MODKEY,                       XKB_KEY_d,              incnmaster,         {.i = -1} },
+    { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_semicolon,      focusstack,         {.i = +1} },
+    { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_colon,          focusstack,         {.i = -1} },
+    { MODKEY,                       XKB_KEY_m,              incnmaster,         {.i = +1} },
+    { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_M,              incnmaster,         {.i = -1} },
+    { MODKEY,                       XKB_KEY_comma,          setmfact,           {.f = -0.05f} },
+    { MODKEY,                       XKB_KEY_period,         setmfact,           {.f = +0.05f} },
     { MODKEY,                       XKB_KEY_s,              zoom,               {0} },
     { MODKEY,                       XKB_KEY_Tab,            view,               {0} },
     { MODKEY,                       XKB_KEY_c,              killclient,         {0} },
@@ -166,26 +168,11 @@ static const Key keys[] = {
     { MODKEY,                       XKB_KEY_x,              movecenter,         {0} },
     { MODKEY,                       XKB_KEY_0,              view,               {.ui = ~0} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_parenright,     tag,                {.ui = ~0} },
+    /* Multi-Monitor
     { MODKEY,                       XKB_KEY_comma,          focusmon,           {.i = WLR_DIRECTION_LEFT} },
     { MODKEY,                       XKB_KEY_period,         focusmon,           {.i = WLR_DIRECTION_RIGHT} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_less,           tagmon,             {.i = WLR_DIRECTION_LEFT} },
-    { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_greater,        tagmon,             {.i = WLR_DIRECTION_RIGHT} },
-    /* varcol */
-    { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Tab,            pushleft,           {0}},
-	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_ISO_Left_Tab,   pushleft,            {0}},
- 
-	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_I,              incncols,           {.i = +1 }},
-	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_D,              incncols,           {.i = -1 }},
-	{ MODKEY,                       XKB_KEY_h,              setcolfact,         {.f = -0.05 }},
-	{ MODKEY,                       XKB_KEY_l,              setcolfact,         {.f = +0.05 }},
-
-	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Tab,            pushleft,           {0}},
-	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_ISO_Left_Tab,   pushleft,           {0}},
-
-	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_I,              incncols,           {.i = +1}},
-	{ MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_D,              incncols,           {.i = -1 }},
-	{ MODKEY,                       XKB_KEY_h,              setcolfact,         {.f = -0.05 }},
-	{ MODKEY,                       XKB_KEY_l,              setcolfact,         {.f = +0.05 }},
+    { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_greater,        tagmon,             {.i = WLR_DIRECTION_RIGHT} },*/
     /* macbook */
     { MODKEY,                       XKB_KEY_XF86MonBrightnessUp,    spawn,      {.v = monBrightnessUp} },
     { MODKEY,                       XKB_KEY_XF86MonBrightnessDown,  spawn,      {.v = monBrightnessDown} },
@@ -195,15 +182,15 @@ static const Key keys[] = {
     { MODKEY,                       XKB_KEY_XF86AudioRaiseVolume,   spawn,      {.v = defVolumeUp} },
     { MODKEY,                       XKB_KEY_XF86AudioMute,          spawn,      {.v = defVolumeMute} },
 
-    TAGKEYS(          XKB_KEY_1, XKB_KEY_exclam,                        0),
-    TAGKEYS(          XKB_KEY_2, XKB_KEY_quotedbl,                      1),
-    TAGKEYS(          XKB_KEY_3, XKB_KEY_section,                       2),
-    TAGKEYS(          XKB_KEY_4, XKB_KEY_dollar,                        3),
-    TAGKEYS(          XKB_KEY_5, XKB_KEY_percent,                       4),
-    TAGKEYS(          XKB_KEY_6, XKB_KEY_ampersand,                     5),
-    TAGKEYS(          XKB_KEY_7, XKB_KEY_slash,                         6),
-    TAGKEYS(          XKB_KEY_8, XKB_KEY_parenleft,                     7),
-    TAGKEYS(          XKB_KEY_9, XKB_KEY_parenright,                    8),
+    TAGKEYS(                        XKB_KEY_1, XKB_KEY_exclam,                  0),
+    TAGKEYS(                        XKB_KEY_2, XKB_KEY_quotedbl,                1),
+    TAGKEYS(                        XKB_KEY_3, XKB_KEY_section,                 2),
+    TAGKEYS(                        XKB_KEY_4, XKB_KEY_dollar,                  3),
+    TAGKEYS(                        XKB_KEY_5, XKB_KEY_percent,                 4),
+    TAGKEYS(                        XKB_KEY_6, XKB_KEY_ampersand,               5),
+    TAGKEYS(                        XKB_KEY_7, XKB_KEY_slash,                   6),
+    TAGKEYS(                        XKB_KEY_8, XKB_KEY_parenleft,               7),
+    TAGKEYS(                        XKB_KEY_9, XKB_KEY_parenright,              8),
 
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Q,          quit,              {0} },
 

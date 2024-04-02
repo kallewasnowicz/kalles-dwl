@@ -312,7 +312,7 @@ static void destroynotify(struct wl_listener *listener, void *data);
 static void destroypointerconstraint(struct wl_listener *listener, void *data);
 static void destroysessionlock(struct wl_listener *listener, void *data);
 static void destroysessionmgr(struct wl_listener *listener, void *data);
-static Monitor *dirtomon(enum wlr_direction dir);
+/*static Monitor *dirtomon(enum wlr_direction dir);*/
 static void dwl_ipc_manager_bind(struct wl_client *client, void *data, uint32_t version, uint32_t id);
 static void dwl_ipc_manager_destroy(struct wl_resource *resource);
 static void dwl_ipc_manager_get_output(struct wl_client *client, struct wl_resource *resource, uint32_t id, struct wl_resource *output);
@@ -325,14 +325,13 @@ static void dwl_ipc_output_set_layout(struct wl_client *client, struct wl_resour
 static void dwl_ipc_output_set_tags(struct wl_client *client, struct wl_resource *resource, uint32_t tagmask, uint32_t toggle_tagset);
 static void dwl_ipc_output_release(struct wl_client *client, struct wl_resource *resource);
 static void focusclient(Client *c, int lift);
-static void focusmon(const Arg *arg);
+/*static void focusmon(const Arg *arg);*/
 static void focusstack(const Arg *arg);
 static Client *focustop(Monitor *m);
 static void fullscreennotify(struct wl_listener *listener, void *data);
 static void handlecursoractivity(bool restore_focus);
 static int hidecursor(void *data);
 static void handlesig(int signo);
-static void incncols(const Arg *arg);
 static void incnmaster(const Arg *arg);
 static void inputdevice(struct wl_listener *listener, void *data);
 static int keybinding(uint32_t mods, xkb_keysym_t sym);
@@ -355,7 +354,6 @@ static void outputmgrtest(struct wl_listener *listener, void *data);
 static void pointerfocus(Client *c, struct wlr_surface *surface,
 		double sx, double sy, uint32_t time);
 static void printstatus(void);
-static void pushleft(const Arg *arg);
 static void quit(const Arg *arg);
 static void rendermon(struct wl_listener *listener, void *data);
 static void requestdecorationmode(struct wl_listener *listener, void *data);
@@ -363,13 +361,13 @@ static void requeststartdrag(struct wl_listener *listener, void *data);
 static void requestmonstate(struct wl_listener *listener, void *data);
 static void resize(Client *c, struct wlr_box geo, int interact);
 static void run(char *startup_cmd);
-static void setcolfact(const Arg *arg);
 static void setcursor(struct wl_listener *listener, void *data);
 static void setcursorshape(struct wl_listener *listener, void *data);
 static void setfloating(Client *c, int floating);
 static void setfullscreen(Client *c, int fullscreen);
 static void setgamma(struct wl_listener *listener, void *data);
 static void setlayout(const Arg *arg);
+static void setmfact(const Arg *arg);
 static void setmon(Client *c, Monitor *m, uint32_t newtags);
 static void setpsel(struct wl_listener *listener, void *data);
 static void setsel(struct wl_listener *listener, void *data);
@@ -377,7 +375,8 @@ static void setup(void);
 static void spawn(const Arg *arg);
 static void startdrag(struct wl_listener *listener, void *data);
 static void tag(const Arg *arg);
-static void tagmon(const Arg *arg);
+/*static void tagmon(const Arg *arg);*/
+static void tile(Monitor *m);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void togglefullscreen(const Arg *arg);
@@ -390,7 +389,6 @@ static void unmapnotify(struct wl_listener *listener, void *data);
 static void updatemons(struct wl_listener *listener, void *data);
 static void updatetitle(struct wl_listener *listener, void *data);
 static void urgent(struct wl_listener *listener, void *data);
-static void varcol(Monitor *m);
 static void view(const Arg *arg);
 static void virtualkeyboard(struct wl_listener *listener, void *data);
 static void virtualpointer(struct wl_listener *listener, void *data);
@@ -1422,7 +1420,7 @@ destroysessionmgr(struct wl_listener *listener, void *data)
 	wl_list_remove(&listener->link);
 }
 
-Monitor *
+/*Monitor *
 dirtomon(enum wlr_direction dir)
 {
 	struct wlr_output *next;
@@ -1436,7 +1434,7 @@ dirtomon(enum wlr_direction dir)
 			selmon->wlr_output, selmon->m.x, selmon->m.y)))
 		return next->data;
 	return selmon;
-}
+}*/
 
 void
 dwl_ipc_manager_bind(struct wl_client *client, void *data, uint32_t version, uint32_t id)
@@ -1697,17 +1695,17 @@ focusclient(Client *c, int lift)
 	client_activate_surface(client_surface(c), 1);
 }
 
-void
+/*void
 focusmon(const Arg *arg)
 {
 	int i = 0, nmons = wl_list_length(&mons);
 	if (nmons) {
 		do /* don't switch to disabled mons */
-			selmon = dirtomon(arg->i);
+		/*	selmon = dirtomon(arg->i);
 		while (!selmon->wlr_output->enabled && i++ < nmons);
 	}
 	focusclient(focustop(selmon), 1);
-}
+}*/
 
 void
 focusstack(const Arg *arg)
@@ -2589,6 +2587,21 @@ setlayout(const Arg *arg)
 	printstatus();
 }
 
+/* arg > 1.0 will set mfact absolutely */
+void
+setmfact(const Arg *arg)
+{
+	float f;
+
+	if (!arg || !selmon || !selmon->lt[selmon->sellt]->arrange)
+		return;
+	f = arg->f < 1.0f ? arg->f + selmon->mfact : arg->f - 1.0f;
+	if (f < 0.1 || f > 0.9)
+		return;
+	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = f;
+	arrange(selmon);
+}
+
 void
 setmon(Client *c, Monitor *m, uint32_t newtags)
 {
@@ -2935,12 +2948,46 @@ tag(const Arg *arg)
 	printstatus();
 }
 
-void
+/*void
 tagmon(const Arg *arg)
 {
 	Client *sel = focustop(selmon);
 	if (sel)
 		setmon(sel, dirtomon(arg->i), 0);
+}*/
+
+void
+tile(Monitor *m)
+{
+	unsigned int mw, my, ty;
+	int i, n = 0;
+	Client *c;
+
+	wl_list_for_each(c, &clients, link)
+		if (VISIBLEON(c, m) && !c->isfloating && !c->isfullscreen)
+			n++;
+	if (n == 0)
+		return;
+
+	if (n > m->nmaster)
+		mw = m->nmaster ? ROUND(m->w.width * m->mfact) : 0;
+	else
+		mw = m->w.width;
+	i = my = ty = 0;
+	wl_list_for_each(c, &clients, link) {
+		if (!VISIBLEON(c, m) || c->isfloating || c->isfullscreen)
+			continue;
+		if (i < m->nmaster) {
+			resize(c, (struct wlr_box){.x = m->w.x, .y = m->w.y + my, .width = mw,
+				.height = (m->w.height - my) / (MIN(n, m->nmaster) - i)}, 0);
+			my += c->geom.height;
+		} else {
+			resize(c, (struct wlr_box){.x = m->w.x + mw, .y = m->w.y + ty,
+				.width = m->w.width - mw, .height = (m->w.height - ty) / (n - i)}, 0);
+			ty += c->geom.height;
+		}
+		i++;
+	}
 }
 
 void
@@ -3357,8 +3404,6 @@ regex_match(const char *pattern, const char *str) {
     return 1;
   return 0;
 }
-
-#include "varcol.c"
 
 #ifdef XWAYLAND
 void
