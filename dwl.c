@@ -312,7 +312,7 @@ static void destroynotify(struct wl_listener *listener, void *data);
 static void destroypointerconstraint(struct wl_listener *listener, void *data);
 static void destroysessionlock(struct wl_listener *listener, void *data);
 static void destroysessionmgr(struct wl_listener *listener, void *data);
-static Monitor *dirtomon(enum wlr_direction dir);
+/*static Monitor *dirtomon(enum wlr_direction dir);*/
 static void dwl_ipc_manager_bind(struct wl_client *client, void *data, uint32_t version, uint32_t id);
 static void dwl_ipc_manager_destroy(struct wl_resource *resource);
 static void dwl_ipc_manager_get_output(struct wl_client *client, struct wl_resource *resource, uint32_t id, struct wl_resource *output);
@@ -325,14 +325,13 @@ static void dwl_ipc_output_set_layout(struct wl_client *client, struct wl_resour
 static void dwl_ipc_output_set_tags(struct wl_client *client, struct wl_resource *resource, uint32_t tagmask, uint32_t toggle_tagset);
 static void dwl_ipc_output_release(struct wl_client *client, struct wl_resource *resource);
 static void focusclient(Client *c, int lift);
-static void focusmon(const Arg *arg);
+/*static void focusmon(const Arg *arg);*/
 static void focusstack(const Arg *arg);
 static Client *focustop(Monitor *m);
 static void fullscreennotify(struct wl_listener *listener, void *data);
 static void handlecursoractivity(bool restore_focus);
 static int hidecursor(void *data);
 static void handlesig(int signo);
-static void incncols(const Arg *arg);
 static void incnmaster(const Arg *arg);
 static void inputdevice(struct wl_listener *listener, void *data);
 static int keybinding(uint32_t mods, xkb_keysym_t sym);
@@ -355,7 +354,6 @@ static void outputmgrtest(struct wl_listener *listener, void *data);
 static void pointerfocus(Client *c, struct wlr_surface *surface,
 		double sx, double sy, uint32_t time);
 static void printstatus(void);
-static void pushleft(const Arg *arg);
 static void quit(const Arg *arg);
 static void rendermon(struct wl_listener *listener, void *data);
 static void requestdecorationmode(struct wl_listener *listener, void *data);
@@ -363,7 +361,6 @@ static void requeststartdrag(struct wl_listener *listener, void *data);
 static void requestmonstate(struct wl_listener *listener, void *data);
 static void resize(Client *c, struct wlr_box geo, int interact);
 static void run(char *startup_cmd);
-static void setcolfact(const Arg *arg);
 static void setcursor(struct wl_listener *listener, void *data);
 static void setcursorshape(struct wl_listener *listener, void *data);
 static void setfloating(Client *c, int floating);
@@ -378,7 +375,7 @@ static void setup(void);
 static void spawn(const Arg *arg);
 static void startdrag(struct wl_listener *listener, void *data);
 static void tag(const Arg *arg);
-static void tagmon(const Arg *arg);
+/*static void tagmon(const Arg *arg);*/
 static void tile(Monitor *m);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
@@ -1423,7 +1420,7 @@ destroysessionmgr(struct wl_listener *listener, void *data)
 	wl_list_remove(&listener->link);
 }
 
-Monitor *
+/*Monitor *
 dirtomon(enum wlr_direction dir)
 {
 	struct wlr_output *next;
@@ -1437,7 +1434,7 @@ dirtomon(enum wlr_direction dir)
 			selmon->wlr_output, selmon->m.x, selmon->m.y)))
 		return next->data;
 	return selmon;
-}
+}*/
 
 void
 dwl_ipc_manager_bind(struct wl_client *client, void *data, uint32_t version, uint32_t id)
@@ -1698,17 +1695,17 @@ focusclient(Client *c, int lift)
 	client_activate_surface(client_surface(c), 1);
 }
 
-void
+/*void
 focusmon(const Arg *arg)
 {
 	int i = 0, nmons = wl_list_length(&mons);
 	if (nmons) {
 		do /* don't switch to disabled mons */
-			selmon = dirtomon(arg->i);
+		/*	selmon = dirtomon(arg->i);
 		while (!selmon->wlr_output->enabled && i++ < nmons);
 	}
 	focusclient(focustop(selmon), 1);
-}
+}*/
 
 void
 focusstack(const Arg *arg)
@@ -2951,13 +2948,13 @@ tag(const Arg *arg)
 	printstatus();
 }
 
-void
+/*void
 tagmon(const Arg *arg)
 {
 	Client *sel = focustop(selmon);
 	if (sel)
 		setmon(sel, dirtomon(arg->i), 0);
-}
+}*/
 
 void
 tile(Monitor *m)
