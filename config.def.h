@@ -61,9 +61,13 @@ static const MonitorRule monrules[] = {
 };
 
 /* keyboard */
-static const struct xkb_rule_names xkb_rules = {
-    .layout     = "de",
-    .options    = NULL,
+/* NOTE: Always include a fallback rule at the end (name as NULL) */
+static const KeyboardRule kbrules[] = {
+	/* name       rules model layout   variant options */
+	/* example:
+	{ "keyboard", NULL, NULL, "us,de", NULL,   "ctrl:nocaps" },
+	*/
+	{ NULL,       NULL, NULL, "de",    NULL,   NULL },
 };
 
 static const int repeat_rate = 25;
@@ -93,26 +97,31 @@ LIBINPUT_CONFIG_CLICK_METHOD_CLICKFINGER
 static const enum libinput_config_click_method click_method = LIBINPUT_CONFIG_CLICK_METHOD_BUTTON_AREAS;
 
 /* You can choose between:
-LIBINPUT_CONFIG_SEND_EVENTS_ENABLED
-LIBINPUT_CONFIG_SEND_EVENTS_DISABLED
-LIBINPUT_CONFIG_SEND_EVENTS_DISABLED_ON_EXTERNAL_MOUSE
-*/
-static const uint32_t send_events_mode = LIBINPUT_CONFIG_SEND_EVENTS_ENABLED;
-
-/* You can choose between:
-LIBINPUT_CONFIG_ACCEL_PROFILE_FLAT
-LIBINPUT_CONFIG_ACCEL_PROFILE_ADAPTIVE
-*/
-static const enum libinput_config_accel_profile accel_profile = LIBINPUT_CONFIG_ACCEL_PROFILE_FLAT;
-static const double accel_speed = 0.0;
-
-/* You can choose between:
 LIBINPUT_CONFIG_TAP_MAP_LRM -- 1/2/3 finger tap maps to left/right/middle
 LIBINPUT_CONFIG_TAP_MAP_LMR -- 1/2/3 finger tap maps to left/middle/right
 */
 static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TAP_MAP_LRM;
 
-static const int cursor_timeout = 5;
+/*
+send_events_mode: You can choose between:
+LIBINPUT_CONFIG_SEND_EVENTS_ENABLED
+LIBINPUT_CONFIG_SEND_EVENTS_DISABLED
+LIBINPUT_CONFIG_SEND_EVENTS_DISABLED_ON_EXTERNAL_MOUSE
+
+accel_profile: You can choose between:
+LIBINPUT_CONFIG_ACCEL_PROFILE_FLAT
+LIBINPUT_CONFIG_ACCEL_PROFILE_ADAPTIVE
+
+NOTE: Always include a fallback rule at the end (name as NULL)
+*/
+static const InputRule inputrules[] = {
+	/* name                 send_events_mode                        accel_profile                       accel_speed*/
+	/* examples:
+	{ "SynPS/2 Synaptics TouchPad", LIBINPUT_CONFIG_SEND_EVENTS_DISABLED, LIBINPUT_CONFIG_ACCEL_PROFILE_FLAT, 0.0 },
+	{ "TPPS/2 IBM TrackPoint", LIBINPUT_CONFIG_SEND_EVENTS_ENABLED, LIBINPUT_CONFIG_ACCEL_PROFILE_ADAPTIVE, 0.0 },
+	*/
+	{ NULL, LIBINPUT_CONFIG_SEND_EVENTS_ENABLED, LIBINPUT_CONFIG_ACCEL_PROFILE_FLAT, 0.0 },
+};
 
 /* If you want to use the windows key for MODKEY, use WLR_MODIFIER_LOGO */
 #define MODKEY WLR_MODIFIER_ALT
