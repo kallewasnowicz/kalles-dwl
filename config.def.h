@@ -123,6 +123,8 @@ static const InputRule inputrules[] = {
 	{ NULL, LIBINPUT_CONFIG_SEND_EVENTS_ENABLED, LIBINPUT_CONFIG_ACCEL_PROFILE_FLAT, 0.0 },
 };
 
+static const int cursor_timeout = 5;
+
 /* If you want to use the windows key for MODKEY, use WLR_MODIFIER_LOGO */
 #define MODKEY WLR_MODIFIER_ALT
 
