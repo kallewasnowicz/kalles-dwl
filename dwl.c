@@ -346,7 +346,7 @@ static void focusclient(Client *c, int lift);
 static void focusstack(const Arg *arg);
 static Client *focustop(Monitor *m);
 static void fullscreennotify(struct wl_listener *listener, void *data);
-static void handlecursoractivity(bool restore_focus);
+static void handlecursoractivity(void);
 static int hidecursor(void *data);
 static void handlesig(int signo);
 static void incnmaster(const Arg *arg);
