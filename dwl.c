@@ -395,7 +395,7 @@ static void startdrag(struct wl_listener *listener, void *data);
 static void tag(const Arg *arg);
 /*static void tagmon(const Arg *arg);*/
 static void tile(Monitor *m);
-static void togglebar(const Arg *arg);
+/*static void togglebar(const Arg *arg);*/
 static void togglefloating(const Arg *arg);
 static void togglefullscreen(const Arg *arg);
 static void movecenter(const Arg *arg);
@@ -3084,12 +3084,12 @@ tile(Monitor *m)
 	}
 }
 
-void
+/*void
 togglebar(const Arg *arg) {
 	DwlIpcOutput *ipc_output;
 	wl_list_for_each(ipc_output, &selmon->dwl_ipc_outputs, link)
 		zdwl_ipc_output_v2_send_toggle_visibility(ipc_output->resource);
-}
+}*/
 
 void
 togglefloating(const Arg *arg)
@@ -3357,13 +3357,31 @@ view(const Arg *arg)
 {
 	size_t i, tmptag;
 
-	size_t i, tmptag;
-
 	if (!selmon || (arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
 		return;
 	selmon->seltags ^= 1; /* toggle sel tagset */
 	if (arg->ui & TAGMASK) {
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
+		selmon->pertag->prevtag = selmon->pertag->curtag;
+
+		if (arg->ui == ~0)
+			selmon->pertag->curtag = 0;
+		else {
+			for (i = 0; !(arg->ui & 1 << i); i++) ;
+			selmon->pertag->curtag = i + 1;
+		}
+	} else {
+		tmptag = selmon->pertag->prevtag;
+		selmon->pertag->prevtag = selmon->pertag->curtag;
+		selmon->pertag->curtag = tmptag;
+	}
+
+	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
+	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
+	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
+	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
+	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
+
 	focusclient(focustop(selmon), 1);
 	arrange(selmon);
 	printstatus();

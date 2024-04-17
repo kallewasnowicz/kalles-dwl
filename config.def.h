@@ -159,7 +159,6 @@ static const Key keys[] = {
     /* modifier                     key                     function            argument */
     { MODKEY,                       XKB_KEY_space,          spawn,              {.v = menucmd} },
     { MODKEY,                       XKB_KEY_t,              spawn,              {.v = termcmd} },
-    { MODKEY,                       XKB_KEY_b,              togglebar,          {0} },
     { MODKEY,                       XKB_KEY_f,              spawn,              {.v = librewolf} },
     { MODKEY,                       XKB_KEY_Sys_Req,        spawn,              {.v = screenshotScreen} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Sys_Req,        spawn,              {.v = screenshotArea} },
