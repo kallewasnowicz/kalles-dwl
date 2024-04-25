@@ -15,4 +15,4 @@ XWAYLAND = -DXWAYLAND
 XLIBS = xcb xcb-icccm
 
 # Custom Flags
-CFLAGS = -march=native -O2 -pipe -flto=thin
+CFLAGS = -march=native -O3 -pipe -flto
