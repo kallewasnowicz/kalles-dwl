@@ -142,7 +142,7 @@ static const int cursor_timeout = 5;
 /* commands */
 static const char *termcmd[]            = { "foot", NULL };
 static const char *menucmd[]            = { "tofi-drun", "--drun-launch=true", NULL };
-static const char *librewolf[]          = { "librewolf", NULL };
+static const char *webbrowser[]          = { "firefox", NULL };
 static const char *screenshotScreen[]   = { "captureScreen", NULL };
 static const char *screenshotArea[]     = { "captureArea", NULL };
 static const char *files[]              = { "pcmanfm", NULL };
@@ -159,7 +159,7 @@ static const Key keys[] = {
     /* modifier                     key                     function            argument */
     { MODKEY,                       XKB_KEY_space,          spawn,              {.v = menucmd} },
     { MODKEY,                       XKB_KEY_t,              spawn,              {.v = termcmd} },
-    { MODKEY,                       XKB_KEY_f,              spawn,              {.v = librewolf} },
+    { MODKEY,                       XKB_KEY_f,              spawn,              {.v = webbrowser} },
     { MODKEY,                       XKB_KEY_Sys_Req,        spawn,              {.v = screenshotScreen} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Sys_Req,        spawn,              {.v = screenshotArea} },
     { MODKEY,                       XKB_KEY_e,              spawn,              {.v = files} },
