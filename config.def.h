@@ -153,6 +153,7 @@ static const char *keyBrightnessDown[]  = { "brightnessctl", "-d", "smc::kbd_bac
 static const char *defVolumeUp[]        = { "pactl_default_increase", NULL };
 static const char *defVolumeDown[]      = { "pactl_default_decrease", NULL };
 static const char *defVolumeMute[]      = { "pactl_default_mute", NULL };
+static const char *toggleBar[]          = { "toggle_waybar", NULL };
 
 static const Key keys[] = {
     /* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
@@ -163,6 +164,7 @@ static const Key keys[] = {
     { MODKEY,                       XKB_KEY_Sys_Req,        spawn,              {.v = screenshotScreen} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_Sys_Req,        spawn,              {.v = screenshotArea} },
     { MODKEY,                       XKB_KEY_e,              spawn,              {.v = files} },
+    { MODKEY,                       XKB_KEY_b,              spawn,              {.v = toggleBar} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_semicolon,      focusstack,         {.i = +1} },
     { MODKEY|WLR_MODIFIER_SHIFT,    XKB_KEY_colon,          focusstack,         {.i = -1} },
     { MODKEY,                       XKB_KEY_m,              incnmaster,         {.i = +1} },
