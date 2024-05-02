@@ -57,7 +57,7 @@ static const MonitorRule monrules[] = {
     /* Macbook */
     { "eDP-1",    0.5f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 1920, 1200, 60.000f, -1 ,0},
 	/* defaults */
-	{ NULL,       0.5f,    1,      1,      &layouts[1], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 0.0f, 0 ,1},
+	{ NULL,       0.5f,    1,      1,      &layouts[1], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 0.0f, 0 ,0},
 };
 
 /* keyboard */
