@@ -26,7 +26,7 @@ static int log_level = WLR_ERROR;
 /* Autostart */
 static const char *const autostart[] = {
     "hyprpaper", NULL,
-    "waybar", NULL,
+    /*"waybar", NULL,*/
     "swaync", NULL,
     "gentoo-pipewire-launcher", NULL,
     "foot", "-s", NULL,
