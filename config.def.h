@@ -153,7 +153,7 @@ static const char *keyBrightnessDown[]  = { "brightnessctl", "-d", "smc::kbd_bac
 static const char *defVolumeUp[]        = { "pactl_default_increase", NULL };
 static const char *defVolumeDown[]      = { "pactl_default_decrease", NULL };
 static const char *defVolumeMute[]      = { "pactl_default_mute", NULL };
-static const char *toggleBar[]          = { "toggle_waybar", NULL };
+static const char *toggleBar[]          = { "waybar-toggle", NULL };
 
 static const Key keys[] = {
     /* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
