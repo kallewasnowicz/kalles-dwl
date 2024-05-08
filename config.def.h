@@ -30,6 +30,7 @@ static const char *const autostart[] = {
     "swaync", NULL,
     "gentoo-pipewire-launcher", NULL,
     "foot", "-s", NULL,
+    "dbus-update-activation-environment", "--all", NULL,
     NULL /* terminate */
 };
 
