@@ -10,6 +10,7 @@ git merge wochap/v0.5/cursortheme
 git merge notchoc/ipc
 git merge palanix/monfig
 git merge wochap/v0.5/movecenter
+git merge wochap/v0.5/pertag
 
 
 ### Alwayscenter
