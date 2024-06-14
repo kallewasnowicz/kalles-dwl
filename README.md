@@ -14,6 +14,7 @@ git merge wochap/v0.5/pertag
 git merge wochap/v0.5/regexrules
 git merge guidocella/unclutter
 git merge korei999/xwayland-handle-minimize
+git merge palanix/zoomswap
 
 
 ### Alwayscenter
