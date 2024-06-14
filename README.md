@@ -4,6 +4,7 @@
 
 ### Commands
 git merge guidocella/alwayscenter
+git merge sevz/autostart
 
 
 ### Alwayscenter
