@@ -1834,7 +1834,7 @@ handlesig(int signo)
 }
 
 void
-handlecursoractivity()
+handlecursoractivity(void)
 {
 	wl_event_source_timer_update(hide_source, cursor_timeout * 1000);
 
