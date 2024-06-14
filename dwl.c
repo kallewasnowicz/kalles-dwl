@@ -300,7 +300,7 @@ static void destroypointerconstraint(struct wl_listener *listener, void *data);
 static void destroysessionlock(struct wl_listener *listener, void *data);
 static void destroysessionmgr(struct wl_listener *listener, void *data);
 static void destroykeyboardgroup(struct wl_listener *listener, void *data);
-static Monitor *dirtomon(enum wlr_direction dir);
+/*static Monitor *dirtomon(enum wlr_direction dir);*/
 static void dwl_ipc_manager_bind(struct wl_client *client, void *data, uint32_t version, uint32_t id);
 static void dwl_ipc_manager_destroy(struct wl_resource *resource);
 static void dwl_ipc_manager_get_output(struct wl_client *client, struct wl_resource *resource, uint32_t id, struct wl_resource *output);
@@ -313,7 +313,7 @@ static void dwl_ipc_output_set_layout(struct wl_client *client, struct wl_resour
 static void dwl_ipc_output_set_tags(struct wl_client *client, struct wl_resource *resource, uint32_t tagmask, uint32_t toggle_tagset);
 static void dwl_ipc_output_release(struct wl_client *client, struct wl_resource *resource);
 static void focusclient(Client *c, int lift);
-static void focusmon(const Arg *arg);
+/*static void focusmon(const Arg *arg);*/
 static void focusstack(const Arg *arg);
 static Client *focustop(Monitor *m);
 static void fullscreennotify(struct wl_listener *listener, void *data);
@@ -331,7 +331,7 @@ static void locksession(struct wl_listener *listener, void *data);
 static void maplayersurfacenotify(struct wl_listener *listener, void *data);
 static void mapnotify(struct wl_listener *listener, void *data);
 static void maximizenotify(struct wl_listener *listener, void *data);
-static void monocle(Monitor *m);
+/*static void monocle(Monitor *m);*/
 static void motionabsolute(struct wl_listener *listener, void *data);
 static void motionnotify(uint32_t time, struct wlr_input_device *device, double sx,
 		double sy, double sx_unaccel, double sy_unaccel);
@@ -364,9 +364,9 @@ static void setup(void);
 static void spawn(const Arg *arg);
 static void startdrag(struct wl_listener *listener, void *data);
 static void tag(const Arg *arg);
-static void tagmon(const Arg *arg);
+/*static void tagmon(const Arg *arg);*/
 static void tile(Monitor *m);
-static void togglebar(const Arg *arg);
+/*static void togglebar(const Arg *arg);*/
 static void togglefloating(const Arg *arg);
 static void togglefullscreen(const Arg *arg);
 static void _movecenter(Client *c, int interact);
@@ -1465,7 +1465,7 @@ destroykeyboardgroup(struct wl_listener *listener, void *data)
 	free(group);
 }
 
-Monitor *
+/*Monitor *
 dirtomon(enum wlr_direction dir)
 {
 	struct wlr_output *next;
@@ -1479,7 +1479,7 @@ dirtomon(enum wlr_direction dir)
 			selmon->wlr_output, selmon->m.x, selmon->m.y)))
 		return next->data;
 	return selmon;
-}
+}*/
 
 void
 dwl_ipc_manager_bind(struct wl_client *client, void *data, uint32_t version, uint32_t id)
@@ -1740,17 +1740,17 @@ focusclient(Client *c, int lift)
 	client_activate_surface(client_surface(c), 1);
 }
 
-void
+/*void
 focusmon(const Arg *arg)
 {
 	int i = 0, nmons = wl_list_length(&mons);
 	if (nmons) {
-		do /* don't switch to disabled mons */
+		do /* don't switch to disabled mons 
 			selmon = dirtomon(arg->i);
 		while (!selmon->wlr_output->enabled && i++ < nmons);
 	}
 	focusclient(focustop(selmon), 1);
-}
+}*/
 
 void
 focusstack(const Arg *arg)
@@ -2120,7 +2120,7 @@ maximizenotify(struct wl_listener *listener, void *data)
 		wlr_xdg_surface_schedule_configure(c->surface.xdg);
 }
 
-void
+/*void
 monocle(Monitor *m)
 {
 	Client *c;
@@ -2136,7 +2136,7 @@ monocle(Monitor *m)
 		snprintf(m->ltsymbol, LENGTH(m->ltsymbol), "[%d]", n);
 	if ((c = focustop(m)))
 		wlr_scene_node_raise_to_top(&c->scene->node);
-}
+}*/
 
 void
 motionabsolute(struct wl_listener *listener, void *data)
@@ -2980,13 +2980,13 @@ tag(const Arg *arg)
 	printstatus();
 }
 
-void
+/*void
 tagmon(const Arg *arg)
 {
 	Client *sel = focustop(selmon);
 	if (sel)
 		setmon(sel, dirtomon(arg->i), 0);
-}
+}*/
 
 void
 tile(Monitor *m)
@@ -3022,12 +3022,12 @@ tile(Monitor *m)
 	}
 }
 
-void
+/*void
 togglebar(const Arg *arg) {
 	DwlIpcOutput *ipc_output;
 	wl_list_for_each(ipc_output, &selmon->dwl_ipc_outputs, link)
 		zdwl_ipc_output_v2_send_toggle_visibility(ipc_output->resource);
-}
+}*/
 
 void
 togglefloating(const Arg *arg)
