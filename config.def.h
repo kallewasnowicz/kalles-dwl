@@ -31,10 +31,12 @@ static const char *const autostart[] = {
 
 
 static const Rule rules[] = {
-	/* app_id             title       tags mask     isfloating   monitor */
-	/* examples: */
-	{ "Gimp_EXAMPLE",     NULL,       0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
-	{ "firefox_EXAMPLE",  NULL,       1 << 8,       0,           -1 }, /* Start on ONLY tag "9" */
+	/* app_id     title       tags mask     isfloating   monitor */
+	/* examples:
+	{ "Gimp",     NULL,       0,            1,           -1 },
+	*/
+	{ "firefox",  NULL,       1 << 8,       0,           -1 },
+	{ "^kitty$",  NULL,       0,            0,           -1 },
 };
 
 /* layout(s) */

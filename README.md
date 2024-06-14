@@ -11,6 +11,7 @@ git merge notchoc/ipc
 git merge palanix/monfig
 git merge wochap/v0.5/movecenter
 git merge wochap/v0.5/pertag
+git merge wochap/v0.5/regexrules
 
 
 ### Alwayscenter
