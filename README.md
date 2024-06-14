@@ -13,6 +13,7 @@ git merge wochap/v0.5/movecenter
 git merge wochap/v0.5/pertag
 git merge wochap/v0.5/regexrules
 git merge guidocella/unclutter
+git merge korei999/xwayland-handle-minimize
 
 
 ### Alwayscenter
