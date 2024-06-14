@@ -9,6 +9,7 @@ git merge wochap/v0.5/centeredmaster
 git merge wochap/v0.5/cursortheme
 git merge notchoc/ipc
 git merge palanix/monfig
+git merge wochap/v0.5/movecenter
 
 
 ### Alwayscenter
