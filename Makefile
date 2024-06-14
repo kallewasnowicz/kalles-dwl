@@ -73,4 +73,4 @@ uninstall:
 
 .SUFFIXES: .c .o
 .c.o:
-	$(CC) $(CPPFLAGS) $(DWLCFLAGS) -c $<
+	$(CC) $(CPPFLAGS) $(DWLCFLAGS) -o $@ -c $<
