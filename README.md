@@ -6,6 +6,7 @@
 git merge guidocella/alwayscenter
 git merge sevz/autostart
 git merge wochap/v0.5/centeredmaster
+git merge wochap/v0.5/cursortheme
 
 
 ### Alwayscenter
