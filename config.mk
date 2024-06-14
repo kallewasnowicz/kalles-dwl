@@ -16,3 +16,4 @@ XLIBS = xcb xcb-icccm
 
 # Custom Flags
 CFLAGS = -march=native -O2 -pipe -flto -fpass-plugin=LLVMPolly.so -fplugin-arg-polly-polly -fplugin-arg-polly-polly-vectorizer=stripmine
+CC=/usr/lib/llvm/18/bin/clang
