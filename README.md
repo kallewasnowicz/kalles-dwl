@@ -2,6 +2,10 @@
 
 ## Patches
 
+### Commands
+git merge guidocella/alwayscenter
+
+
 ### Alwayscenter
 Automatically center floating windows.
 
