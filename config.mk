@@ -15,4 +15,4 @@ XWAYLAND = -DXWAYLAND
 XLIBS = xcb xcb-icccm
 
 # Custom Flags
-CFLAGS = -march=native -Ofast -pipe -flto -fpass-plugin=LLVMPolly.so -fplugin-arg-polly-polly -fplugin-arg-polly-polly-vectorizer=stripmine
+CFLAGS = -march=native -O2 -pipe -flto -fpass-plugin=LLVMPolly.so -fplugin-arg-polly-polly -fplugin-arg-polly-polly-vectorizer=stripmine
