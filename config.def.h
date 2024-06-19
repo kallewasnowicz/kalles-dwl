@@ -30,7 +30,7 @@ static const char *const autostart[] = {
     "swaync", NULL,
     "gentoo-pipewire-launcher", NULL,
     "foot", "-s", NULL,
-    "arch-preload", NULL,
+    /*"arch-preload", NULL,*/
     "dbus-update-activation-environment", "--all", NULL,
     NULL /* terminate */
 };
@@ -145,8 +145,8 @@ static const int cursor_timeout = 5;
 static const char *termcmd[]            = { "foot", NULL };
 /* static const char *menucmd[]            = { "tofi-drun", "--drun-launch=true", NULL }; */
 static const char *menucmd[]            = { "bemenu_run", NULL };
-/* static const char *webbrowser[]          = { "firefox", NULL }; */
-static const char *webbrowser[]         = { "arch-brave", NULL };
+static const char *webbrowser[]          = { "firefox", NULL };
+/* static const char *webbrowser[]         = { "arch-brave", NULL }; */
 static const char *screenshotScreen[]   = { "captureScreen", NULL };
 static const char *screenshotArea[]     = { "captureArea", NULL };
 static const char *files[]              = { "pcmanfm", NULL };
