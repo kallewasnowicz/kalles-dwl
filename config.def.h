@@ -30,6 +30,7 @@ static const char *const autostart[] = {
     "swaync", NULL,
     "gentoo-pipewire-launcher", NULL,
     "foot", "-s", NULL,
+    "arch-preload", NULL,
     "dbus-update-activation-environment", "--all", NULL,
     NULL /* terminate */
 };
@@ -40,7 +41,7 @@ static const Rule rules[] = {
 	/* examples:
 	{ "Gimp",     NULL,       0,            1,           -1 },
 	*/
-	{ "firefox",  NULL,       1 << 8,       0,           -1 },
+	{ "blababl",  NULL,       1 << 8,       0,           -1 },
 	{ "^kitty$",  NULL,       0,            0,           -1 },
 };
 
@@ -66,8 +67,8 @@ static const MonitorRule monrules[] = {
 	*/
     /* Macbook */
     { "eDP-1",    0.5f,    1,      1,      &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 1920, 1200, 60.000f, -1 ,0},
-	/* defaults */
-	{ NULL,       0.5f,    1,      1,      &layouts[1], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 0.0f, 0 ,0},
+    /* defaults */
+    { NULL,       0.5f,    1,      1,      &layouts[1], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0, 0, 0, 0.0f, 0 ,0},
 
 };
 
@@ -144,7 +145,8 @@ static const int cursor_timeout = 5;
 static const char *termcmd[]            = { "foot", NULL };
 /* static const char *menucmd[]            = { "tofi-drun", "--drun-launch=true", NULL }; */
 static const char *menucmd[]            = { "bemenu_run", NULL };
-static const char *webbrowser[]          = { "firefox", NULL };
+/* static const char *webbrowser[]          = { "firefox", NULL }; */
+static const char *webbrowser[]         = { "arch-brave", NULL };
 static const char *screenshotScreen[]   = { "captureScreen", NULL };
 static const char *screenshotArea[]     = { "captureArea", NULL };
 static const char *files[]              = { "pcmanfm", NULL };
