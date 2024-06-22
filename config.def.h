@@ -23,19 +23,6 @@ static const unsigned int cursorsize       = 24;
 /* logging */
 static int log_level = WLR_ERROR;
 
-/* Autostart */
-static const char *const autostart[] = {
-    /*"hyprpaper", NULL,*/
-    /*"waybar", NULL,*/
-    /*"swaync", NULL,*/
-    /*"gentoo-pipewire-launcher", NULL,*/
-    /*"foot", "-s", NULL,*/
-    /*"arch-preload", NULL,*/
-    /*"dbus-update-activation-environment", "--all", NULL,*/
-    NULL /* terminate */
-};
-
-
 static const Rule rules[] = {
 	/* app_id     title       tags mask     isfloating   monitor */
 	/* examples:
