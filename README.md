@@ -23,16 +23,6 @@ https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/alwayscenter
 https://codeberg.org/guidocella/dwl/src/branch/alwayscenter
 
 
-### Autostart
-Allow dwl to execute commands from autostart array in your config.h file. And when you exit dwl all processes from autostart array will be killed.
-
-Note: Commands from array are executed using execvp(). So if you need to execute shell command you need to prefix it with "sh", "-c" (change sh to any shell you like).
-
-https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/autostart
-
-https://codeberg.org/sevz/dwl/src/branch/autostart
-
-
 ### Centered Master
 This is a port of centeredmaster patch for dwm: https://dwm.suckless.org/patches/centeredmaster
 
