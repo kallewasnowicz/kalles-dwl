@@ -51,16 +51,6 @@ https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/cursortheme
 https://codeberg.org/wochap/dwl/src/branch/v0.5/cursortheme
 
 
-### IPC
-Largely based on raphi's somebar, this patch provides an ipc for wayland clients to get and set dwl state. The ipc is intended for status bars, but can also be scripted with tools like dwlmsg.
-
-Status information to stdout is currently disabled as dwl tends to freeze. For now, dwlmsg -w should act as a drop-in replacement.
-
-https://codeberg.org/dwl/dwl-patches/src/branch/main/patches/ipc
-
-https://codeberg.org/notchoc/dwl/src/branch/ipc
-
-
 ### Monfig
 Allows more monitor configuration in config.h
 

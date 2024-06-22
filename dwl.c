@@ -2792,13 +2792,6 @@ tile(Monitor *m)
 	}
 }
 
-/*void
-togglebar(const Arg *arg) {
-	DwlIpcOutput *ipc_output;
-	wl_list_for_each(ipc_output, &selmon->dwl_ipc_outputs, link)
-		zdwl_ipc_output_v2_send_toggle_visibility(ipc_output->resource);
-}*/
-
 void
 togglefloating(const Arg *arg)
 {
