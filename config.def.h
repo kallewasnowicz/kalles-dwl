@@ -23,6 +23,7 @@ static const unsigned int cursorsize       = 24;
 /* logging */
 static int log_level = WLR_ERROR;
 
+/* NOTE: ALWAYS keep a rule declared even if you don't use rules (e.g leave at least one example) */
 static const Rule rules[] = {
 	/* app_id     title       tags mask     isfloating   monitor */
 	/* examples:
