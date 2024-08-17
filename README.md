@@ -4,12 +4,12 @@
 
 ### Commands
 git merge guidocella/alwayscenter
-git merge wochap/v0.5/centeredmaster
-git merge wochap/v0.5/cursortheme
+git merge wochap/v0.6-a/centeredmaster
+git merge wochap/v0.6-a/cursortheme
 git merge palanix/monfig
-git merge wochap/v0.5/movecenter
-git merge wochap/v0.5/pertag
-git merge wochap/v0.5/regexrules
+git merge wochap/v0.6-a/movecenter
+git merge wochap/v0.6-a/pertag
+git merge wochap/v0.6-a/regexrules
 git merge guidocella/unclutter
 git merge korei999/xwayland-handle-minimize
 git merge palanix/zoomswap
