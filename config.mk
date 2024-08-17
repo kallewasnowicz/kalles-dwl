@@ -4,7 +4,7 @@ VERSION  = `git describe --tags --dirty 2>/dev/null || echo $(_VERSION)`
 PKG_CONFIG = pkg-config
 
 # paths
-PREFIX = /usr/local
+PREFIX = ~/.local
 MANDIR = $(PREFIX)/share/man
 DATADIR = $(PREFIX)/share
 
@@ -34,3 +34,8 @@ XLIBS =
 # To avoid warnings about them, we do not use -std=c99 and instead of using the
 # gmake default 'CC=c99', we use cc.
 CC = cc
+
+# Custom Flags
+CFLAGS = -march=native -O2 -pipe -flto #-fpass-plugin=LLVMPolly.so -fplugin-arg-polly-polly -fplugin-arg-polly-polly-vectorizer=stripmine
+LDFLAGS = -Wl,-O1 -Wl,--as-needed -Wl,-z,pack-relative-relocs -Wl,--as-needed -fuse-ld=mold -march=native -O2 -pipe -flto #-fpass-plugin=LLVMPolly.so -fplugin-arg-polly-polly -fplugin-arg-polly-polly-vectorizer=stripmine
+#CC=/usr/lib/llvm/18/bin/clang

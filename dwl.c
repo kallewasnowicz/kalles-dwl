@@ -705,7 +705,7 @@ centeredmaster(Monitor *m)
 
 	if (n > m->nmaster) {
 		/* go mfact box in the center if more than nmaster clients */
-		mw = ROUND(m->nmaster ? m->w.width * m->mfact : 0);
+		mw = (int)round(m->nmaster ? m->w.width * m->mfact : 0);
 		tw = m->w.width - mw;
 
 		if (n - m->nmaster > 1) {
