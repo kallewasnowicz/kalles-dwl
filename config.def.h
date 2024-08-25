@@ -136,7 +136,7 @@ static const char *termcmd[]            = { "foot", NULL };
 /* static const char *menucmd[]            = { "tofi-drun", "--drun-launch=true", NULL }; */
 static const char *menucmd[]            = { "bemenu_run", NULL };
 /* static const char *webbrowser[]          = { "firefox", NULL }; */
-static const char *webbrowser[]         = { "brave-bin", NULL };
+static const char *webbrowser[]         = { "brave-bin", "--password-store=basic", NULL };
 static const char *screenshotScreen[]   = { "captureScreen", NULL };
 static const char *screenshotArea[]     = { "captureArea", NULL };
 static const char *files[]              = { "pcmanfm", NULL };
