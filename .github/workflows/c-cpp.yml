@@ -9,26 +9,13 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: router
 
     steps:
     - uses: actions/checkout@v4
     - name: Install Dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          libinput-dev \
-          libwayland-dev \
-          libxkbcommon-dev \
-          wayland-protocols \
-          pkg-config \
-          libxcb1-dev \
-          libxcb-util-dev \
-          libxcb-ewmh-dev \
-          libxcb-keysyms1-dev \
-          libxcb-icccm4-dev \
-          xwayland \
-          libwlroots-dev
+        uname -sr
 #    - name: configure
 #      run: ./configure
     - name: make
